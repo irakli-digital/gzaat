@@ -1,4 +1,19 @@
+"use client";
+
+import { db } from "../lib/instant";
+
 export default function Home() {
+  // Load homepage content and feature cards from InstantDB
+  const { isLoading, error, data } = db.useQuery({ homepage: {}, features: {} });
+  const homepage = (data as any)?.homepage?.[0] || {};
+  const features = ((data as any)?.features as any[]) || [];
+  const heroTitle = homepage.title || "Excellence in";
+  const heroAccent = homepage.accent || "Education";
+  const heroSubtitle =
+    homepage.subtitle ||
+    "Empowering minds through innovative learning, groundbreaking research, and a commitment to academic excellence that shapes tomorrow's leaders.";
+  const ctaPrimary = homepage.ctaPrimary || "Apply Now";
+  const ctaSecondary = homepage.ctaSecondary || "Learn More";
   return (
     <div className="min-h-screen bg-white">
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -39,19 +54,16 @@ export default function Home() {
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
-                Excellence in
-                <span className="block text-red-400">Education</span>
+                {heroTitle}
+                <span className="block text-red-400">{heroAccent}</span>
               </h1>
-              <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto mb-8">
-                Empowering minds through innovative learning, groundbreaking research,
-                and a commitment to academic excellence that shapes tomorrow's leaders.
-              </p>
+              <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto mb-8">{heroSubtitle}</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button className="bg-red-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors shadow-lg">
-                  Apply Now
+                  {ctaPrimary}
                 </button>
                 <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-colors">
-                  Learn More
+                  {ctaSecondary}
                 </button>
               </div>
             </div>
@@ -70,33 +82,21 @@ export default function Home() {
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center p-6 rounded-lg hover:shadow-lg transition-shadow">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.168 18.477 18.582 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
+              {(features.slice(0, 3).length ? features.slice(0, 3) : [
+                { title: "World-Class Faculty", description: "Learn from renowned professors and industry experts committed to your academic success." },
+                { title: "Innovation Hub", description: "Access cutting-edge research facilities and participate in groundbreaking discoveries." },
+                { title: "Global Community", description: "Join a diverse network of scholars from around the world, fostering lifelong connections." },
+              ]).map((f, idx) => (
+                <div key={idx} className="text-center p-6 rounded-lg hover:shadow-lg transition-shadow">
+                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.168 18.477 18.582 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{(f as any).title}</h3>
+                  <p className="text-gray-600">{(f as any).description}</p>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">World-Class Faculty</h3>
-                <p className="text-gray-600">Learn from renowned professors and industry experts committed to your academic success.</p>
-              </div>
-              <div className="text-center p-6 rounded-lg hover:shadow-lg transition-shadow">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Innovation Hub</h3>
-                <p className="text-gray-600">Access cutting-edge research facilities and participate in groundbreaking discoveries.</p>
-              </div>
-              <div className="text-center p-6 rounded-lg hover:shadow-lg transition-shadow">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Global Community</h3>
-                <p className="text-gray-600">Join a diverse network of scholars from around the world, fostering lifelong connections.</p>
-              </div>
+              ))}
             </div>
           </div>
         </section>
