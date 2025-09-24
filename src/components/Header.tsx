@@ -9,7 +9,6 @@ const primary = [
   { href: "/admissions", label: "Admissions" },
   { href: "/academics", label: "Academics" },
   { href: "/student-life", label: "Student Life" },
-  { href: "/community", label: "Community" },
   { href: "/summer-academy", label: "Summer Academy" },
 ];
 
@@ -79,4 +78,3 @@ export default function Header() {
     </header>
   );
 }
-
