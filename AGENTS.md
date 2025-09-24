@@ -13,6 +13,21 @@ Use Bun for scripting to stay aligned with `bun.lock`:
 
 If Bun is unavailable, use `npm install` and `npm run dev` to stay productive, but ensure the Bun lockfile stays the source of truth when you open a PR.
 
+## InstantDB Integration
+- Env var: set `NEXT_PUBLIC_INSTANT_APP_ID` in `.env.local` (not committed) to your app id. App id is public; never commit admin tokens.
+- SDK init: `src/lib/instant.ts` exports `db = init({ appId })`. This file is not a client component; only files that call `db.useQuery` need `"use client"`.
+- Query pattern (used on the homepage):
+  - Namespaces: `homepage` (fields: `title`, `accent`, `subtitle`, `ctaPrimary`, `ctaSecondary`) and `features` (fields: `title`, `description`).
+  - Example: `const { data } = db.useQuery({ homepage: {}, features: {} });`
+- Schema & permissions (recommended):
+  - `npx instant-cli@latest login`
+  - `npx instant-cli@latest init` (creates `instant.schema.ts` and `instant.perms.ts`)
+  - `npx instant-cli@latest push schema` and `npx instant-cli@latest push perms`
+- Tips:
+  - Keep `src/lib/instant.ts` as the single init. Co-locate queries with components. Use fallbacks in UI for missing data.
+  - The Instant Devtool appears on localhost; confirm the app is connected and queries resolve.
+  - Seeding: visit `/admin/seed` (dev-only convenience) to write sample homepage, features, news, and events. Requires temporary write perms for anonymous users or be logged in with write access.
+
 ## Coding Style & Naming Conventions
 Write TypeScript-first functional components with two-space indentation (match existing files). Components and hooks use PascalCase (`SchoolHero.tsx`) and camelCase (`useFetchAdmissions`). Co-locate Tailwind-friendly styles in JSX; reserve `globals.css` for resets and theme tokens. Run `bun run lint` early; the Flat ESLint config extends `next/core-web-vitals` and `next/typescript`, so heed accessibility and typing warnings.
 
