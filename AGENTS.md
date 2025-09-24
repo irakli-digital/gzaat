@@ -26,7 +26,9 @@ If Bun is unavailable, use `npm install` and `npm run dev` to stay productive, b
 - Tips:
   - Keep `src/lib/instant.ts` as the single init. Co-locate queries with components. Use fallbacks in UI for missing data.
   - The Instant Devtool appears on localhost; confirm the app is connected and queries resolve.
-  - Seeding: visit `/admin/seed` (dev-only convenience) to write sample homepage, features, news, and events. Requires temporary write perms for anonymous users or be logged in with write access.
+  - Seeding options:
+    - Client: visit `/admin/seed` to write sample content (requires write perms for current user and may need `attrs.create=true` during first run).
+    - Server: POST `/api/admin/seed` with header `Authorization: Bearer $SEED_HTTP_TOKEN` after setting `INSTANT_APP_ADMIN_TOKEN` and `SEED_HTTP_TOKEN` in `.env.local`.
 
 ## Coding Style & Naming Conventions
 Write TypeScript-first functional components with two-space indentation (match existing files). Components and hooks use PascalCase (`SchoolHero.tsx`) and camelCase (`useFetchAdmissions`). Co-locate Tailwind-friendly styles in JSX; reserve `globals.css` for resets and theme tokens. Run `bun run lint` early; the Flat ESLint config extends `next/core-web-vitals` and `next/typescript`, so heed accessibility and typing warnings.
